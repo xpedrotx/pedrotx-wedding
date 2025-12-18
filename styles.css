@@ -1,0 +1,991 @@
+/* ==================== RESET & BASE ==================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  
+  /* --- Cores Principais --- */
+  --background: #e8e2d4c7;        /* Fundo do site */
+  --foreground: #3d3833;          /* Texto principal */
+  
+  --primary: #58161fcc;             /* Botões, Títulos, Corações */
+  --primary-hover: #4b5824;       /* Cor ao passar o mouse */
+    
+  --secondary: #4b5824;           /* Subtítulos, bordas finas */
+  --secondary-foreground: #ffffff;
+  
+  /* --- Elementos de UI --- */
+  --card: #ffffff21;              /* Fundo branco dos cards */
+  --card-foreground: #3d3833;
+  
+  --muted: #e0dee8;               /* fundos secundários */
+  --muted-foreground: #7a746c;    /* descrições */
+  --muted-faint: rgba(122, 116, 108, 0.7); /* Texto rodapé */
+  
+  --border: #e8e2d4c7;            /* Borda */
+  --input: #ffffff;               /* Fundo dos campos de texto */
+  
+  --destructive: #58161fcc;         /* erros/avisos */
+  --destructive-light: rgba(220, 38, 38, 0.1); /* Fundo hover do botão remover */
+  
+  --border-subtle: rgba(166, 124, 109, 0.1);    /* Bordas */
+  --border-light: rgba(166, 124, 109, 0.2);     /* Bordas de inputs e cards */
+  --divider-color: rgba(166, 124, 109, 0.3);    /* Linhas divisórias */
+  
+  /* Fundos Especiais */
+  --bg-glass: rgba(255, 255, 255, 0.5);         /* Efeito vidro (Timer, Produtos) */
+  --bg-section: rgba(245, 243, 240, 0.3);       /* Fundo seções (Noivos, Havan) */
+  --bg-item: rgba(245, 243, 240, 0.5);          /* Fundo itens lista crianças */
+  
+  /* Sombras e Overlays */
+  --overlay-dark: rgba(61, 56, 51, 0.2);        /* Sombra sobre foto */
+  --shadow-soft: rgba(61, 56, 51, 0.1);         /* Sombra suave cards */
+  --shadow-card: rgba(0, 0, 0, 0.05);           /* Sombra genérica */
+  
+  /* Cores de Loja/Placeholder */
+  --placeholder-bg: #f0f0f0;      /* Fundo onde não tem imagem */
+  --btn-disabled: #cccccc;        /* Botão desabilitado */
+  --accent-line: rgba(109, 166, 117, 0.5);      /* Linha decorativa */
+
+  /* Configurações Globais */
+  --radius: 0.5rem;
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Montserrat", sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-serif);
+  background-color: var(--background);
+  color: var(--foreground);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ==================== UTILITIES ==================== */
+.hidden {
+  display: none !important;
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0) translateX(-50%); }
+  50% { transform: translateY(-10px) translateX(-50%); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Estilo para o campo de código */
+#guest-code {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ==================== COUNTDOWN SECTION ==================== */
+.countdown-section {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 5rem 1rem;
+  overflow: hidden;
+}
+
+/* --- DECORATIVE CIRCLES --- */
+.decorative-circles {
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.circle {
+  position: absolute;
+  border: 1px solid var(--primary);
+  border-radius: 50%;
+}
+
+.circle-1 {
+  top: 5rem;
+  left: 2.5rem;
+  width: 8rem;
+  height: 8rem;
+  opacity: 0.3;
+}
+
+.circle-2 {
+  bottom: 8rem;
+  right: 5rem;
+  width: 12rem;
+  height: 12rem;
+  opacity: 0.2;
+}
+
+.circle-3 {
+  top: 33%;
+  right: 2.5rem;
+  width: 6rem;
+  height: 6rem;
+  opacity: 0.4;
+}
+
+.countdown-content {
+  text-align: center;
+  z-index: 10;
+  max-width: 56rem;
+  margin: 0 auto;
+}
+
+.countdown-label {
+  font-size: 0.875rem;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  margin-bottom: 1rem;
+  font-family: var(--font-sans);
+}
+
+.countdown-timer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+.time-unit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.time-box {
+  width: 5rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  background-color: var(--bg-glass);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 1px 3px var(--shadow-card);
+}
+
+.time-box span {
+  font-size: 1.875rem;
+  font-weight: 300;
+  color: var(--foreground);
+}
+
+.time-label {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.divider-line {
+  height: 1px;
+  width: 4rem;
+  background-color: var(--divider-color);
+}
+
+.heart-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  color: var(--primary);
+}
+
+.couple-names {
+  font-size: 2.5rem;
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.ampersand {
+  color: var(--primary);
+}
+
+.wedding-date {
+  font-size: 1.125rem;
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-weight: 300;
+}
+
+.scroll-indicator {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: bounce 2s infinite;
+}
+
+.scroll-mouse {
+  width: 1.5rem;
+  height: 2.5rem;
+  border: 2px solid var(--primary);
+  border-radius: 9999px;
+  display: flex;
+  justify-content: center;
+  padding-top: 0.5rem;
+  opacity: 0.7;
+}
+
+.scroll-dot {
+  width: 0.25rem;
+  height: 0.5rem;
+  background-color: var(--primary);
+  border-radius: 9999px;
+}
+
+/* ==================== COUPLE SECTION ==================== */
+.couple-section {
+  padding: 5rem 1rem;
+  background-color: var(--bg-section);
+}
+
+.couple-container {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-subtitle {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  color: var(--secondary);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.section-title {
+  font-size: 1.875rem;
+  font-weight: 300;
+}
+
+.couple-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  align-items: center;
+}
+
+.couple-photo {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+}
+
+.couple-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photo-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, var(--overlay-dark), transparent);
+}
+
+.couple-story {
+  text-align: center;
+}
+
+.story-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.divider-line-small {
+  height: 1px;
+  width: 3rem;
+  background-color: var(--accent-line);
+}
+
+.heart-icon-small {
+  width: 1rem;
+  height: 1rem;
+  color: var(--primary);
+}
+
+.story-title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+.story-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  color: var(--muted-foreground);
+  line-height: 1.7;
+  font-family: var(--font-sans);
+  font-weight: 300;
+}
+
+.quote {
+  margin-top: 1.5rem;
+}
+
+.quote-text {
+  font-size: 1.25rem;
+  font-style: italic;
+  color: var(--foreground);
+}
+
+.quote-author {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin-top: 0.5rem;
+  font-family: var(--font-sans);
+}
+
+/* ==================== RSVP SECTION ==================== */
+.rsvp-section {
+  padding: 5rem 1rem;
+}
+
+.rsvp-container {
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.rsvp-description {
+  color: var(--muted-foreground);
+  margin-bottom: 3rem;
+  font-family: var(--font-sans);
+  font-weight: 300;
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ==================== BUTTONS (Global) ==================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  text-decoration: none;
+}
+
+/* Botão Principal */
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: 1px solid var(--primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  transform: translateY(-2px);
+}
+
+/* Botão Contorno: */
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--primary);
+  color: var(--primary);
+}
+
+.btn-outline:hover {
+  background-color: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: white;
+}
+
+.btn-lg {
+  padding: 1rem 2rem;
+  font-size: 1.125rem;
+}
+
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+}
+
+.btn-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+.btn-icon-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+.btn-icon-sm.external {
+  margin-left: 0.25rem;
+}
+
+/* ==================== CARD & FORM ==================== */
+.card {
+  margin-top: 2rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  background-color: var(--card);
+  box-shadow: 0 10px 15px -3px var(--shadow-card);
+  animation: zoomIn 0.5s ease;
+}
+
+.card-header {
+  padding: 1.5rem 1.5rem 0;
+  text-align: center;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.card-description {
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  color: var(--foreground);
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  background-color: var(--input);
+  color: var(--foreground);
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.form-group input::placeholder {
+  color: var(--muted-foreground);
+}
+
+.children-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.children-empty {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  font-style: italic;
+  font-family: var(--font-sans);
+}
+
+#children-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.child-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  background-color: var(--bg-item);
+  border: 1px solid var(--border-subtle);
+  animation: fadeIn 0.3s ease;
+}
+
+.child-inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.child-input-group {
+  flex: 1;
+}
+
+.child-input-group.age {
+  width: 100%;
+}
+
+.child-input-group label {
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  margin-bottom: 0.25rem;
+}
+
+.child-input-group input {
+  width: 100%;
+}
+
+.btn-remove {
+  align-self: flex-end;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--destructive);
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: background-color 0.2s ease;
+}
+
+.btn-remove:hover {
+  background-color: var(--destructive-light);
+}
+
+.btn-remove svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding-top: 1rem;
+}
+
+/* Success Card */
+.success-card {
+  animation: zoomIn 0.5s ease;
+}
+
+.success-card .card-content {
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.success-icon {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-color: var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.success-icon svg {
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary);
+}
+
+.success-title {
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.success-message {
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-weight: 300;
+}
+
+.success-message .guest-name {
+  color: var(--foreground);
+  font-weight: 500;
+}
+
+.success-subtitle {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+
+/* ==================== FUN STORE ==================== */
+.fun-store-section {
+  padding: 5rem 1rem;
+  background-color: transparent;
+}
+
+.carousel-container {
+  position: relative;
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1rem;
+}
+
+.carousel-window {
+  overflow: hidden;
+  width: 100%;
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1rem;
+  transition: transform 0.5s ease-in-out;
+}
+
+/* --- CARD DO PRODUTO  --- */
+.product-card {
+  flex: 0 0 100%;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+
+  /* Estilo do Cartão Flutuante */
+  background-color: var(--background);
+  box-shadow: 0 10px 20px -5px var(--shadow-soft);
+  border: 1px solid var(--bg-glass);
+  border-radius: var(--radius);
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+/* FOTO MENOR (Compacta) */
+.product-image-container {
+  width: 100%;
+  height: 200px;
+  background-color: var(--placeholder-bg);
+  overflow: hidden;
+}
+
+.product-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover .product-image-container img {
+  transform: scale(1.05);
+}
+
+/* ÁREA DE TEXTO MAIS APERTADA */
+.product-info {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  flex: 1;
+  width: 100%;
+}
+
+.product-info .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.product-info .card-description {
+  font-size: 0.8rem;
+  line-height: 1.4;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* Procure por este bloco e deixe assim: */
+.product-price {
+  font-size: 1.5rem;             /* Aumentei um tiquinho pra ficar mais visível */
+  font-family: var(--font-sans); /* <--- AQUI ESTÁ A MÁGICA (Era --font-serif) */
+  color: var(--primary);
+  font-weight: 700;              /* Deixei bem negrito pra destacar a grana */
+  margin: 0.5rem 0;
+}
+
+.product-stock {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted-foreground);
+  margin-bottom: 0.75rem;
+}
+
+.product-sold-out {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.badge-sold {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background-color: var(--destructive);
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 99px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  transform: rotate(15deg);
+}
+
+/* BOTÃO DE COMPRA (Compacto) */
+.btn-buy {
+  background-color: var(--primary);
+  color: white;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  min-height: 2.5rem;
+  font-weight: 500;
+  margin-top: auto;
+  border: none;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.2s ease;
+}
+
+.btn-buy:hover {
+  background-color: var(--primary-hover);
+}
+
+/* BOTÕES DE NAVEGAÇÃO */
+.carousel-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  z-index: 10;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: background 0.3s;
+}
+
+.carousel-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+.carousel-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: var(--btn-disabled);
+}
+
+/* ==================== GIFT SECTION (Havan) ==================== */
+.gift-section {
+  padding: 5rem 1rem;
+  background-color: var(--bg-section);
+}
+
+.gift-container {
+  max-width: 40rem;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.gift-icon-wrapper {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+  background-color: var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+}
+
+.gift-icon {
+  width: 2rem;
+  height: 2rem;
+  color: var(--primary);
+}
+
+.gift-description {
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  max-width: 28rem;
+  margin: 0 auto 2rem;
+}
+
+.gift-redirect-text {
+  margin-top: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+}
+
+/* ==================== FOOTER ==================== */
+.footer {
+  padding: 3rem 1rem;
+  text-align: center;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.footer-content {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.footer-initials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer-initials span {
+  font-size: 1.5rem;
+  font-weight: 300;
+}
+
+.footer-date {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  font-family: var(--font-sans);
+}
+
+.footer-note {
+  font-size: 0.75rem;
+  color: var(--muted-faint);
+  margin-top: 1rem;
+  font-family: var(--font-sans);
+}
+
+/* ==================== RESPONSIVE GLOBAL ==================== */
+@media (min-width: 640px) {
+  .child-item { flex-direction: row; align-items: flex-end; }
+  .child-inputs { flex-direction: row; flex: 1; }
+  .child-input-group.age { width: 6rem; }
+  .form-actions { flex-direction: row; }
+  .form-actions .btn { flex: 1; }
+}
+
+@media (min-width: 768px) {
+  .countdown-section, .couple-section, .rsvp-section, .gift-section { padding: 8rem 1rem; }
+  
+  .countdown-label { font-size: 1rem; }
+  .countdown-timer { gap: 2rem; }
+  .time-box { width: 7rem; height: 7rem; }
+  .time-box span { font-size: 3rem; }
+  .divider-line { width: 8rem; }
+  .couple-names { font-size: 3.75rem; }
+  .wedding-date { font-size: 1.25rem; }
+  .section-header { margin-bottom: 4rem; }
+  .section-title { font-size: 3rem; }
+  .couple-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
+  .couple-photo { aspect-ratio: 3 / 4; }
+  .couple-story { text-align: left; }
+  .story-divider { justify-content: flex-start; }
+  .story-title { font-size: 1.875rem; }
+  
+  /* CARROSSEL NO TABLET: 2 ITENS */
+  .product-card {
+    flex: 0 0 calc((100% - 1rem) / 2);
+    min-width: calc((100% - 1rem) / 2);
+  }
+}
+
+@media (min-width: 1024px) {
+  .couple-names { font-size: 4.5rem; }
+  
+  /* CARROSSEL NO DESKTOP: 3 ITENS */
+  .product-card {
+    flex: 0 0 calc((100% - 2rem) / 3);
+    min-width: calc((100% - 2rem) / 3);
+  }
+}
