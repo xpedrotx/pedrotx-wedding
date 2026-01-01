@@ -113,7 +113,7 @@ function renderChildren() {
             value="${child.age}" 
             placeholder="Idade" 
             min="0" 
-            max="15" 
+            max="99" 
             required 
             oninvalid="this.setCustomValidity('A idade deve ser menor ou igual a 15')" 
             oninput="this.setCustomValidity('')"
@@ -193,7 +193,7 @@ if(confirmationForm) {
 
       if (data.result === "success") {
         console.log("Sucesso:", data);
-        showSuccess(guestName);
+        showSuccess(guestName, guestSpouse);
         
         guestNameInput.value = "";
         document.getElementById("guest-code").value = ""; 
@@ -212,11 +212,25 @@ if(confirmationForm) {
   });
 }
 
-function showSuccess(name) {
-  let message = `Obrigado, <span class="guest-name">${name}</span>!`;
-  if (children.length > 0) {
-    message += ` Você e ${children.length} filho${children.length > 1 ? "s" : ""} foram confirmados.`;
+function showSuccess(name, spouse) {
+  const nameUpper = name.toUpperCase();
+  const spouseUpper = spouse ? spouse.toUpperCase() : "";
+  
+  let message = `Obrigado, <span class="guest-name">${nameUpper}</span>`;
+  
+  if (spouseUpper) {
+    message += ` e <span class="guest-name">${spouseUpper}</span>`;
   }
+  
+  message += `!`;
+
+  if (children.length > 0) {
+    const childrenNames = children.map(c => c.name.toUpperCase()).join(", ");
+    message += `<br>Filhos confirmados: <strong>${childrenNames}</strong>.`;
+  } else {
+    message += `<br>Sua presença foi confirmada.`;
+  }
+
   successMessage.innerHTML = message;
 
   rsvpForm.classList.add("hidden");
@@ -256,8 +270,6 @@ const nextBtn = document.querySelector('.next-btn');
 let currentSlide = 0;
 let totalItems = 0;
 let itemsPerView = 3;
-
-// Atualiza quantos itens cabem na tela
 function updateItemsPerView() {
   if (window.innerWidth < 768) {
     itemsPerView = 1; // Celular
@@ -291,15 +303,10 @@ function loadStore() {
       products.forEach(product => {
         const isSoldOut = product.stock <= 0;
         const imageUrl = product.image ? product.image : 'https://placehold.co/600x400/e8e4de/3d3833?text=Presente';
-
-        // --- AQUI ESTÁ A MUDANÇA (Lógica do "Você Decide") ---
         let displayPrice;
-        
-        // Verifica se o preço é zero, nulo ou vazio
         if (!product.price || product.price == 0 || product.price === "0") {
              displayPrice = "Você decide o valor! ✨"; 
         } else {
-             // Lógica padrão de formatação (R$ 50,00)
              const priceNumber = parseFloat(String(product.price).replace(',', '.'));
              if (!isNaN(priceNumber)) {
                   displayPrice = priceNumber.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
@@ -307,7 +314,6 @@ function loadStore() {
                   displayPrice = `R$ ${product.price}`;
              }
         }
-        // -----------------------------------------------------
 
         const card = document.createElement('div');
         card.className = `product-card ${isSoldOut ? 'product-sold-out' : ''}`;
@@ -339,7 +345,6 @@ function loadStore() {
     });
 }
 
-// Lógica de Movimento do Carrossel (para os botões funcionarem)
 window.moveCarousel = function(direction) {
   const maxSlides = Math.max(0, totalItems - itemsPerView);
   
@@ -377,12 +382,9 @@ function updateCarouselButtons() {
 window.buyItem = function(itemId) {
   const btn = event.target; 
   const originalText = btn.innerText;
-
-  // --- ABERTURA IMEDIATA DA ABA (Anti-Bloqueio) ---
   const newTab = window.open('', '_blank');
   
   if (newTab) {
-    // Tela de espera na nova aba
     newTab.document.write(`
       <html>
         <head><title>Processando...</title></head>
@@ -413,14 +415,12 @@ window.buyItem = function(itemId) {
   .then(response => response.json())
   .then(data => {
     if (data.result === "success") {
-      // SUCESSO: Redireciona a aba aberta
       if (newTab) {
         newTab.location.href = data.link;
       }
       btn.innerText = "Reservado!";
       loadStore(); 
     } else {
-      // ERRO: Fecha a aba
       if (newTab) newTab.close();
       
       alert("Ops: " + data.message);
@@ -430,7 +430,6 @@ window.buyItem = function(itemId) {
     }
   })
   .catch(error => {
-    // ERRO DE CONEXÃO
     if (newTab) newTab.close();
     
     console.error(error);
