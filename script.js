@@ -115,7 +115,7 @@ function renderChildren() {
             min="0" 
             max="99" 
             required 
-            oninvalid="this.setCustomValidity('A idade deve ser menor ou igual a 15')" 
+            oninvalid="this.setCustomValidity('A idade deve ser maior ou igual a 0 anos.')" 
             oninput="this.setCustomValidity('')"
           >
         </div>
