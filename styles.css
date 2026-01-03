@@ -872,6 +872,12 @@ body {
   transition: background 0.3s;
 }
 
+.carousel-btn svg {
+  width: 1.5rem;
+  height: 1.5rem;
+  stroke: currentColor; 
+}
+
 .carousel-btn:hover {
   background-color: var(--primary-hover);
 }
