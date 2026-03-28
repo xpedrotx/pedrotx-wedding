@@ -29,8 +29,8 @@
   
   --border: #e8e2d4c7;            /* Borda */
   --input: #ffffff;               /* Fundo dos campos de texto */
-  
-  --destructive: #58161fcc;         /* erros/avisos */
+
+  --destructive: #58161fbb;         /* erros/avisos */
   --destructive-light: rgba(220, 38, 38, 0.1); /* Fundo hover do botão remover */
   
   --border-subtle: rgba(166, 124, 109, 0.1);    /* Bordas */
