@@ -74,9 +74,6 @@ body {
 }
 
 /* ==================== UTILITIES ==================== */
-.hidden {
-  display: none !important;
-}
 
 .pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
@@ -90,21 +87,6 @@ body {
 @keyframes bounce {
   0%, 100% { transform: translateY(0) translateX(-50%); }
   50% { transform: translateY(-10px) translateX(-50%); }
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes zoomIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-#guest-code {
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
 }
 
 /* ==================== COUNTDOWN SECTION ==================== */
@@ -318,7 +300,7 @@ body {
 
 .couple-photo {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 2987 / 4480; 
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
@@ -391,27 +373,6 @@ body {
   color: var(--muted-foreground);
   margin-top: 0.5rem;
   font-family: var(--font-sans);
-}
-
-/* ==================== RSVP SECTION ==================== */
-.rsvp-section {
-  padding: 5rem 1rem;
-}
-
-.rsvp-container {
-  max-width: 40rem;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.rsvp-description {
-  color: var(--muted-foreground);
-  margin-bottom: 3rem;
-  font-family: var(--font-sans);
-  font-weight: 300;
-  max-width: 28rem;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* ==================== BUTTONS (Global) ==================== */
@@ -622,7 +583,7 @@ body {
   height: 1rem;
 }
 
-/* ==================== BOTÕES DO FORMULÁRIO (MOBILE OTIMIZADO) ==================== */
+/* ==================== BOTÕES DO FORMULÁRIO ==================== */
 
 .form-actions {
   display: flex;
@@ -888,11 +849,7 @@ body {
   background-color: var(--btn-disabled);
 }
 
-/* ==================== GIFT SECTION (Havan) ==================== */
-.gift-section {
-  padding: 5rem 1rem;
-  background-color: var(--bg-section);
-}
+/* ==================== GIFT SECTION  ==================== */
 
 .gift-container {
   max-width: 40rem;
@@ -923,13 +880,6 @@ body {
   font-weight: 300;
   max-width: 28rem;
   margin: 0 auto 2rem;
-}
-
-.gift-redirect-text {
-  margin-top: 1.5rem;
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
-  font-family: var(--font-sans);
 }
 
 /* ==================== FOOTER ==================== */
@@ -992,7 +942,6 @@ body {
   .section-header { margin-bottom: 4rem; }
   .section-title { font-size: 3rem; }
   .couple-grid { grid-template-columns: 1fr 1fr; gap: 4rem; }
-  .couple-photo { aspect-ratio: 3 / 4; }
   .couple-story { text-align: left; }
   .story-divider { justify-content: flex-start; }
   .story-title { font-size: 1.875rem; }

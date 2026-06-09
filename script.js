@@ -2,7 +2,7 @@ const yearEl = document.getElementById("currentYear");
 if (yearEl) yearEl.textContent = new Date().getFullYear();
 
 // ==================== COUNTDOWN ====================
-const WEDDING_DATE = new Date("2026-05-02T18:00:00")
+const WEDDING_DATE = new Date("2026-05-02T18:00:00-03:00");
 
 function updateCountdown() {
   const now = new Date()
@@ -17,14 +17,12 @@ function updateCountdown() {
   let days, hours, minutes, seconds
 
   if (difference > 0) {
-    // Before wedding
     labelElement.textContent = "Faltam"
     days = Math.floor(difference / (1000 * 60 * 60 * 24))
     hours = Math.floor((difference / (1000 * 60 * 60)) % 24)
     minutes = Math.floor((difference / 1000 / 60) % 60)
     seconds = Math.floor((difference / 1000) % 60)
   } else {
-    // After wedding - show time married
     labelElement.textContent = "Casados há"
     const marriedDiff = now.getTime() - WEDDING_DATE.getTime()
     days = Math.floor(marriedDiff / (1000 * 60 * 60 * 24))
@@ -39,228 +37,11 @@ function updateCountdown() {
   if(secondsElement) secondsElement.textContent = String(seconds).padStart(2, "0")
 }
 
-// Update countdown every second
 updateCountdown()
 setInterval(updateCountdown, 1000)
 
-// ==================== RSVP FORM ====================
-const rsvpInitial = document.getElementById("rsvp-initial")
-const rsvpForm = document.getElementById("rsvp-form")
-const rsvpSuccess = document.getElementById("rsvp-success")
-const confirmationForm = document.getElementById("confirmation-form")
-const btnConfirm = document.getElementById("btn-confirm")
-const btnCancel = document.getElementById("btn-cancel")
-const btnAddChild = document.getElementById("btn-add-child")
-const btnReset = document.getElementById("btn-reset")
-const childrenList = document.getElementById("children-list")
-const childrenEmpty = document.getElementById("children-empty")
-const successMessage = document.getElementById("success-message")
-const guestNameInput = document.getElementById("guest-name")
-
-let children = []
-let childIdCounter = 0
-
-// Show form
-if(btnConfirm) {
-  btnConfirm.addEventListener("click", () => {
-    rsvpInitial.classList.add("hidden")
-    rsvpForm.classList.remove("hidden")
-  })
-}
-
-// Cancel form
-if(btnCancel) {
-  btnCancel.addEventListener("click", (e) => {
-    if(e) e.preventDefault();
-    resetForm()
-  })
-}
-
-// Add child
-if(btnAddChild) {
-  btnAddChild.addEventListener("click", () => {
-    const childId = ++childIdCounter
-    children.push({ id: childId, name: "", age: "" })
-    renderChildren()
-  })
-}
-
-// Render children list
-function renderChildren() {
-  if(!childrenList) return;
-
-  if (children.length === 0) {
-    childrenEmpty.classList.remove("hidden")
-    childrenList.innerHTML = ""
-    return
-  }
-
-  childrenEmpty.classList.add("hidden")
-  childrenList.innerHTML = children
-    .map(
-      (child, index) => `
-    <div class="child-item" data-id="${child.id}">
-      <div class="child-inputs">
-        <div class="child-input-group">
-          <label>Nome do(a) filho(a) ${index + 1}</label>
-          <input type="text" class="child-name" value="${child.name}" placeholder="Nome da criança" required>
-        </div>
-        <div class="child-input-group age">
-          <label>Idade</label>
-          <input 
-            type="number" 
-            class="child-age" 
-            value="${child.age}" 
-            placeholder="Idade" 
-            min="0" 
-            max="99" 
-            required 
-            oninvalid="this.setCustomValidity('A idade deve ser maior ou igual a 0 anos.')" 
-            oninput="this.setCustomValidity('')"
-          >
-        </div>
-      </div>
-      <button type="button" class="btn-remove" onclick="removeChildItem(${child.id})">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <polyline points="3 6 5 6 21 6"></polyline>
-          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-        </svg>
-      </button>
-    </div>
-  `,
-    )
-    .join("")
-
-  // Add event listeners for inputs
-  document.querySelectorAll(".child-item").forEach((item) => {
-    const id = Number.parseInt(item.dataset.id)
-    const nameInput = item.querySelector(".child-name")
-    const ageInput = item.querySelector(".child-age")
-
-    nameInput.addEventListener("input", (e) => {
-      const child = children.find((c) => c.id === id)
-      if (child) child.name = e.target.value
-    })
-
-    ageInput.addEventListener("input", (e) => {
-      const child = children.find((c) => c.id === id)
-      if (child) child.age = e.target.value
-    })
-  })
-}
-
-// Remove child
-window.removeChildItem = function(id) { 
-  children = children.filter((child) => child.id !== id)
-  renderChildren()
-}
-
-// Form submission
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyM8oAekXjywc07FYtYN40RrU803n90689ppHtJUmH6rlGUte8UiGqVtT-S_oxYzVsC-Q/exec";
 
-if(confirmationForm) {
-  confirmationForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-
-    const honeypot = document.getElementById("boco_honey");
-    if (honeypot && honeypot.value) return;
-
-    const submitBtn = confirmationForm.querySelector('button[type="submit"]');
-    const originalBtnText = submitBtn.innerHTML;
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = "Verificando...";
-
-    const guestName = guestNameInput.value.trim();
-    const guestCode = document.getElementById("guest-code").value.trim();
-    const guestSpouse = document.getElementById("guest-spouse").value.trim();
-
-    const payload = {
-      name: guestName,
-      spouse: guestSpouse,
-      code: guestCode,
-      children: children
-    };
-
-    fetch(SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "text/plain;charset=utf-8" },
-    })
-    .then(response => response.json())
-    .then(data => {
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnText;
-
-      if (data.result === "success") {
-        console.log("Sucesso:", data);
-        showSuccess(guestName, guestSpouse);
-        
-        guestNameInput.value = "";
-        document.getElementById("guest-code").value = ""; 
-        children = [];
-      } else {
-        console.warn("Rejeitado:", data);
-        alert("⚠️ " + (data.message || "Erro na verificação."));
-      }
-    })
-    .catch((error) => {
-      console.error("Erro:", error);
-      alert("Erro de conexão.");
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = originalBtnText;
-    });
-  });
-}
-
-function showSuccess(name, spouse) {
-  const nameUpper = name.toUpperCase();
-  const spouseUpper = spouse ? spouse.toUpperCase() : "";
-  
-  let message = `Obrigado, <span class="guest-name">${nameUpper}</span>`;
-  
-  if (spouseUpper) {
-    message += ` e <span class="guest-name">${spouseUpper}</span>`;
-  }
-  
-  message += `!`;
-
-  if (children.length > 0) {
-    const childrenNames = children.map(c => c.name.toUpperCase()).join(", ");
-    message += `<br>Filhos confirmados: <strong>${childrenNames}</strong>.`;
-  } else {
-    message += `<br>Sua presença foi confirmada.`;
-  }
-
-  successMessage.innerHTML = message;
-
-  rsvpForm.classList.add("hidden");
-  rsvpSuccess.classList.remove("hidden");
-}
-
-// ==================== LÓGICA DE RESET ====================
-
-function resetForm() {
-  if(guestNameInput) guestNameInput.value = "";
-  
-  const codeInput = document.getElementById("guest-code");
-  if (codeInput) codeInput.value = "";
-
-  const spouseInput = document.getElementById("guest-spouse");
-  if (spouseInput) spouseInput.value = "";
-  
-  children = [];
-  renderChildren();
-  
-  rsvpForm.classList.add("hidden");
-  rsvpSuccess.classList.add("hidden");
-  rsvpInitial.classList.remove("hidden");
-}
-
-if(btnReset) {
-  btnReset.addEventListener("click", () => {
-    resetForm();
-  });
-}
 
 // ==================== LOJA COM CARROSSEL ====================
 const storeTrack = document.getElementById('store-track');
@@ -272,11 +53,11 @@ let totalItems = 0;
 let itemsPerView = 3;
 function updateItemsPerView() {
   if (window.innerWidth < 768) {
-    itemsPerView = 1; // Celular
+    itemsPerView = 1;
   } else if (window.innerWidth < 1024) {
-    itemsPerView = 2; // Tablets
+    itemsPerView = 2;
   } else {
-    itemsPerView = 3; // PC
+    itemsPerView = 3;
   }
 }
 
@@ -329,7 +110,7 @@ function loadStore() {
             
             <div class="product-price">${displayPrice}</div>
             
-            <button class="btn btn-primary btn-buy" onclick="buyItem('${product.id}')" ${isSoldOut ? 'disabled' : ''}>
+            <button class="btn btn-primary btn-buy" onclick="buyItem('${product.id}', this)" ${isSoldOut ? 'disabled' : ''}>
               ${isSoldOut ? 'Já levaram' : 'Presentear'}
             </button>
           </div>
@@ -358,7 +139,7 @@ window.moveCarousel = function(direction) {
 }
 
 function updateCarouselPosition() {
-  if(!storeTrack.children[0]) return;
+  if(!storeTrack || !storeTrack.children[0]) return;
   
   const item = storeTrack.children[0];
   const itemWidth = item ? item.offsetWidth : 0;
@@ -377,29 +158,13 @@ function updateCarouselButtons() {
   nextBtn.disabled = currentSlide >= maxSlides;
 }
 
-// ==================== FUNÇÃO DE COMPRA (CORRIGIDA - NOVA ABA) ====================
+// ==================== FUNÇÃO DE COMPRA ====================
 
-window.buyItem = function(itemId) {
-  const btn = event.target; 
+window.buyItem = function(itemId, btnElement) {
+  const btn = btnElement; 
   const originalText = btn.innerText;
-  const newTab = window.open('', '_blank');
-  
-  if (newTab) {
-    newTab.document.write(`
-      <html>
-        <head><title>Processando...</title></head>
-        <body style="font-family: 'Montserrat', sans-serif; display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; background-color:#e8e2d4; color:#3d3833;">
-          <h2 style="margin-bottom: 10px;">Reservando seu presente...</h2>
-          <p>Aguarde um instante, estamos gerando seu link de pagamento.</p>
-        </body>
-      </html>
-    `);
-  } else {
-    alert("Seu navegador bloqueou a nova aba. Por favor, permita popups para este site.");
-    return;
-  }
 
-  btn.innerText = "Reservando...";
+  btn.innerText = "Gerando Link...";
   btn.disabled = true;
 
   const payload = {
@@ -415,14 +180,10 @@ window.buyItem = function(itemId) {
   .then(response => response.json())
   .then(data => {
     if (data.result === "success") {
-      if (newTab) {
-        newTab.location.href = data.link;
-      }
-      btn.innerText = "Reservado!";
+      btn.innerText = "Redirecionando...";
+      window.open(data.link, '_blank');
       loadStore(); 
     } else {
-      if (newTab) newTab.close();
-      
       alert("Ops: " + data.message);
       btn.innerText = originalText;
       btn.disabled = false;
@@ -430,12 +191,35 @@ window.buyItem = function(itemId) {
     }
   })
   .catch(error => {
-    if (newTab) newTab.close();
-    
     console.error(error);
-    alert("Erro de conexão.");
+    alert("Erro de conexão. Tente novamente.");
     btn.innerText = originalText;
     btn.disabled = false;
   });
 }
 loadStore();
+
+// ==================== FRASES DINÂMICAS ====================
+const frasesDeAmor = [
+  { text: "O amor não se vê com os olhos, mas com a alma.", author: "William Shakespeare" },
+  { text: "A suprema felicidade da vida é ter a convicção de que somos amados.", author: "Victor Hugo" },
+  { text: "Amo-te sem saber como, nem quando, nem onde, amo-te simplesmente sem problemas nem orgulho.", author: "Pablo Neruda" },
+  { text: "O amor é fogo que arde sem se ver; é ferida que dói, e não se sente.", author: "Luís Vaz de Camões" },
+  { text: "Cada qual sabe amar a seu modo; o modo, pouco importa; o essencial é que saiba amar.", author: "Machado de Assis" },
+  { text: "Amai, porque nada melhor para a saúde que um amor correspondido.", author: "Vinicius de Moraes" },
+  { text: "O amor não é um hábito, um compromisso, ou uma dívida. O amor é simplesmente... o amor.", author: "Paulo Coelho" },
+  { text: "As mais belas coisas do mundo não podem ser vistas nem tocadas, mas sim sentidas com o coração.", author: "Helen Keller" },
+  { text: "Sempre há um pouco de loucura no amor, mas sempre há um pouco de razão na loucura.", author: "Friedrich Nietzsche" },
+  { text: "O verdadeiro amor nunca se esgota. Quanto mais se dá, mais se tem.", author: "Antoine de Saint-Exupéry" }
+];
+
+const quoteTextEl = document.getElementById('quote-text');
+const quoteAuthorEl = document.getElementById('quote-author');
+
+if (quoteTextEl && quoteAuthorEl) {
+  const randomIndex = Math.floor(Math.random() * frasesDeAmor.length);
+  const fraseSorteada = frasesDeAmor[randomIndex];
+  
+  quoteTextEl.textContent = `"${fraseSorteada.text}"`;
+  quoteAuthorEl.textContent = `— ${fraseSorteada.author}`;
+}

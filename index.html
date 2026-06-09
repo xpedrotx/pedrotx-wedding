@@ -2,7 +2,6 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<base href="/wedding/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="shortcut icon" href="public/images/icone_aba.png" type="image/png">
   <title>Pedro & Geovana - Casamento</title>
@@ -79,7 +78,7 @@
 
         <div class="couple-grid">
           <div class="couple-photo">
-            <img src="public/images/geopedro2.jpg" alt="Pedro e Geovana">
+            <img src="public/images/geopedro.jpg" alt="Pedro e Geovana">
             <div class="photo-overlay"></div>
           </div>
 
@@ -103,108 +102,8 @@
 
 
             <div class="quote">
-              <p class="quote-text">"O amor não se vê com os olhos, mas com a alma."</p>
-              <p class="quote-author">— William Shakespeare</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="rsvp-section" id="rsvp">
-      <div class="rsvp-container">
-        <p class="section-subtitle">Confirme sua Presença</p>
-        <h2 class="section-title">Venha Celebrar Conosco</h2>
-        <p class="rsvp-description">Sua presença tornará nosso dia ainda mais especial. Por favor, confirme sua participação.</p>
-
-        <div id="rsvp-initial">
-          <button class="btn btn-primary btn-lg" id="btn-confirm">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-              <circle cx="9" cy="7" r="4"></circle>
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-            </svg>
-            Confirmar Presença
-          </button>
-        </div>
-
-        <div id="rsvp-form" class="hidden">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title">
-                <svg class="heart-icon-small" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                </svg>
-                Confirmação de Presença
-              </h3>
-              <p class="card-description">Preencha os dados abaixo para confirmar</p>
-            </div>
-            <div class="card-content">
-              <form id="confirmation-form">
-                <div class="form-group">
-                  <label for="guest-name">Seu Nome Completo</label>
-                  <input type="text" id="guest-name" placeholder="Digite seu nome" required>
-                </div>
-                <div class="form-group">
-                  <label for="guest-spouse">Nome do Cônjuge (Opcional)</label>
-                  <input type="text" id="guest-spouse" placeholder="Marido, esposa, namorado(a)...">
-                </div>
-
-                <div class="form-group">
-                  <div class="form-group">
-                  <label for="guest-code">Código do Convite (5 caracteres)</label>
-                  <input type="text" id="guest-code" placeholder="Ex: A1B2C" maxlength="5" style="text-transform: uppercase; letter-spacing: 2px; font-weight: bold;" required>
-                  <small style="color: #7a746c; font-size: 0.75rem;">O código está no seu convite.</small>
-                </div>
-                </div>
-
-                <div class="form-group">
-                  <div class="children-header">
-                    <label>Filhos que irão comparecer</label>
-                    <button type="button" class="btn btn-outline btn-sm" id="btn-add-child">
-                      <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </svg>
-                      Adicionar
-                    </button>
-                  </div>
-                  <p class="children-empty" id="children-empty">Nenhum filho adicionado. Clique em "Adicionar" se necessário.</p>
-                  <div id="children-list"></div>
-                </div>
-
-                <div class="form-actions">
-                  <button type="button" class="btn btn-outline" id="btn-cancel">Cancelar</button>
-                  <button type="submit" class="btn btn-primary">
-                    <svg class="btn-icon-sm" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                    </svg>
-                    Confirmar Presença
-                  </button>
-                </div>
-                <div style="display:none;">
-                  <label>Não preencha este campo se for humano:</label>
-                  <input type="text" name="boco_honey" id="boco_honey">
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-
-        <div id="rsvp-success" class="hidden">
-          <div class="card success-card">
-            <div class="card-content">
-              <div class="success-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                </svg>
-              </div>
-              <h3 class="success-title">Presença Confirmada!</h3>
-              <p class="success-message" id="success-message"></p>
-              <p class="success-subtitle">Estamos ansiosos para celebrar com vocês!</p>
-              <button class="btn btn-outline" id="btn-reset">Confirmar outro convidado</button>
+              <p class="quote-text" id="quote-text">"O amor não se vê com os olhos, mas com a alma."</p>
+              <p class="quote-author" id="quote-author">— William Shakespeare</p>
             </div>
           </div>
         </div>
@@ -237,7 +136,7 @@
 
         <div class="carousel-window">
           <div id="store-track" class="carousel-track">
-            <p class="loading-store">Carregando ofertas...</p>
+            <p class="loading-store">Carregando loja...</p>
           </div>
         </div>
 
@@ -246,42 +145,6 @@
             <polyline points="9 18 15 12 9 6"></polyline>
           </svg>
         </button>
-      </div>
-    </section>
-
-    <section class="gift-section">
-      <div class="gift-container">
-        <div class="gift-icon-wrapper">
-          <svg class="gift-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 12 20 22 4 22 4 12"></polyline>
-            <rect x="2" y="7" width="20" height="5"></rect>
-            <line x1="12" y1="22" x2="12" y2="7"></line>
-            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-          </svg>
-        </div>
-        
-        <p class="section-subtitle">Lista de Presentes</p>
-        <h2 class="section-title">Faça parte do nosso novo lar</h2>
-        <p class="gift-description">Se você deseja nos presentear, preparamos uma lista especial com itens que nos ajudarão a construir nosso lar.</p>
-        
-        <a href="https://lista.havan.com.br/Convidado/ItensListaPresente/886312" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-lg">
-          <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="20 12 20 22 4 22 4 12"></polyline>
-            <rect x="2" y="7" width="20" height="5"></rect>
-            <line x1="12" y1="22" x2="12" y2="7"></line>
-            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-          </svg>
-          Ver Lista de Presentes
-          <svg class="btn-icon-sm external" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-            <polyline points="15 3 21 3 21 9"></polyline>
-            <line x1="10" y1="14" x2="21" y2="3"></line>
-          </svg>
-        </a>
-        
-        <p class="gift-redirect-text">Você será redirecionado para o site da Havan</p>
       </div>
     </section>
 
