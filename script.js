@@ -83,7 +83,7 @@ function loadStore() {
 
       products.forEach(product => {
         const isSoldOut = product.stock <= 0;
-        const imageUrl = product.image ? '/wedding/' + product.image : 'https://placehold.co/600x400/e8e4de/3d3833?text=Presente';
+        const imageUrl = product.image ? product.image : 'https://placehold.co/600x400/e8e4de/3d3833?text=Presente';
         let displayPrice;
         if (!product.price || product.price == 0 || product.price === "0") {
              displayPrice = "Você decide o valor! ✨"; 
